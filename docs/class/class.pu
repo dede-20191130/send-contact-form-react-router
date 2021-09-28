@@ -1,0 +1,41 @@
+@startuml class diagram
+
+class App << (C,yellow) Container>> {
+    ==state==
+    ~isShowModal
+    ~formValues
+}
+
+class OpinionForm << (C,green) Component>> {
+    ご意見フォーム
+    ==state==
+    ~methods:useForm
+    ==props==
+    #setIsShowModal()
+    ==methods==
+    +onSubmit()
+}
+
+class Modalizer << (C,green) Component>> {
+    子要素をモーダル化
+    ==props==
+    #modalContainer
+    #children
+    ==methods==
+    +createPortal()
+}
+
+class SubmitShower << (C,green) Component>> {
+    送信完了表示
+    ==props==
+    #formValues
+    ==methods==
+    +onClickClose()
+    +onClickDownLoad()
+}
+
+App *-- OpinionForm
+App *-- Modalizer
+Modalizer -- SubmitShower
+
+@enduml
