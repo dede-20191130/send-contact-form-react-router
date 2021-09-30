@@ -1,0 +1,27 @@
+@mixin borderless-button($bk-color: gray, $color: black) {
+    padding: 12px 0;
+    background-color: $bk-color;
+    border: none;
+    color: $color;
+    cursor: pointer;
+}
+
+@mixin position($position, $top: null, $right: null, $bottom: null, $left: null) {
+    position: $position;
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+}
+
+@mixin absolute($args...) {
+    @include position(absolute, $args...);
+}
+
+@mixin relative($args...) {
+    @include position(relative, $args...);
+}
+
+@mixin fixed($args...) {
+    @include position(fixed, $args...);
+}

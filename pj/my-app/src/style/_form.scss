@@ -1,0 +1,132 @@
+// ** Reference:https://codepen.io/andiio/pen/tFECp **
+@use "sass:math";
+@use "mixin" as m;
+
+$border: #c6c6c6;
+$border-focus: #9fb1c1;
+$brand-color: #1b3d4d;
+$asphalt: #506982;
+$form-color: #364e96;
+
+.normal-form-container {
+    margin: 0 auto;
+    width: 400px;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+
+    h2 {
+        text-align: center;
+        color: $form-color;
+        padding: 0.2rem 0;
+        border-bottom: solid 1px $form-color;
+    }
+
+    form {
+        padding: 4rem 10%;
+    }
+
+    .controls {
+        text-align: left;
+        position: relative;
+
+        @mixin frame {
+            padding: 12px;
+            border: 1px solid $border;
+            width: 100%;
+            margin-bottom: 18px;
+            color: #888;
+            font-size: 16px;
+            font-weight: 300;
+            font-family: Arial, Helvetica, sans-serif;
+            border-radius: 2px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type="date"],
+        input[type="tel"],
+        textarea,
+        button,
+        select {
+            @include frame();
+            transition: all 0.3s;
+
+            &:focus,
+            &:hover {
+                outline: none;
+                border-color: $border-focus;
+                + label {
+                    color: $form-color;
+                    cursor: text;
+                    font-weight: 700;
+                }
+            }
+            + label {
+                position: absolute;
+                left: 8px;
+                top: 8.5px;
+                width: 60%;
+                color: #999;
+                font-size: 16px;
+                display: inline-block;
+                padding: 4px 10px;
+                font-weight: 400;
+                background-color: rgba(255, 255, 255, 0);
+                transition: color 0.3s, top 0.3s, background-color 0.8s;
+                background-color: rgba(255, 255, 255, 1);
+
+                &.active {
+                    font-size: 10px;
+                    top: -11px;
+                    color: #555;
+                    background-color: rgba(255, 255, 255, 1);
+                    width: auto;
+                }
+            }
+        }
+
+        fieldset {
+            @include frame();
+            input[type="radio"] {
+                display: none;
+                &:checked + label {
+                    background: $form-color;
+                    color: #ffffff;
+                }
+                &:hover:not(:checked) + label {
+                    background: rgba($form-color, 0.1);
+                }
+            }
+            label {
+                width: math.div(1, 3.11) * 100%;
+                text-align: center;
+                display: inline-block;
+                box-sizing: border-box;
+                border: 1px solid $form-color;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+        }
+
+        select {
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+        textarea {
+            resize: none;
+            height: 200px;
+        }
+        input[type="button"],
+        input[type="reset"] {
+            @include m.borderless-button($form-color,#fff);
+            width: 25%;
+            height: 100%;
+        }
+    }
+    .error-area {
+        color: red;
+        background-color: rgba($color: red, $alpha: 0.2);
+    }
+}

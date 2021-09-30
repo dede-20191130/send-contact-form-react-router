@@ -1,0 +1,65 @@
+@use "mixin" as m;
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+#modal {
+    &-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+
+        &::before {
+            display: inline-block;
+            height: 100%;
+            content: "";
+            vertical-align: middle;
+        }
+    }
+
+    &-box {
+        display: inline-block;
+        background-color: white;
+        padding: 40px;
+        width: 300px;
+        border: 1px solid black;
+        border-radius: 5px;
+        vertical-align: middle;
+        position: relative;
+    }
+    &-message {
+        font: {
+            weight: 700;
+            size: 24px;
+        }
+    }
+    &-download {
+        @include m.borderless-button(#364e96, #fff);
+        width: 70%;
+        margin-top: 20px;
+    }
+    &-close {
+        font-weight: bold;
+        display: inline-block;
+        cursor: pointer;
+        @include m.absolute($top: 5px, $right: 10px);
+    }
+}
+
+#cover-div {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9000;
+    width: 100%;
+    height: 100%;
+    background-color: gray;
+    opacity: 0.3;
+}
