@@ -11,7 +11,7 @@ class OpinionForm << (C,green) Component>> {
     ==state==
     ~methods:useForm
     ==props==
-    #setIsShowModal()
+    #onSubmit()
     ==methods==
     +onSubmit()
 }
