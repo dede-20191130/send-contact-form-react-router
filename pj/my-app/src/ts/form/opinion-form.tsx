@@ -5,7 +5,7 @@ interface OpinionFormArgs {
     onSubmit: (data: IFormInput) => void
 }
 
-interface IFormInput {
+export interface IFormInput {
     fname: string,
     fgender: string,
     fage: string,

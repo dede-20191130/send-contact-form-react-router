@@ -4,6 +4,11 @@ class App << (C,yellow) Container>> {
     ==state==
     ~isShowModal
     ~formValues
+    ~activeElemStocked
+    ==methods==
+    +onSubmit()
+    +onCloseModal()
+
 }
 
 class OpinionForm << (C,green) Component>> {
@@ -16,26 +21,29 @@ class OpinionForm << (C,green) Component>> {
     +onSubmit()
 }
 
-class Modalizer << (C,green) Component>> {
+class Modalizer << (C,lightblue) Higher-Order Component>> {
     子要素をモーダル化
     ==props==
     #modalContainer
     #children
-    ==methods==
+    ==return==
     +createPortal()
 }
 
-class SubmitShower << (C,green) Component>> {
-    送信完了表示
+class SubmitIndicator << (C,green) Component>> {
+    送信完了表示ポップアップ
     ==props==
     #formValues
+    #onCloseModal
     ==methods==
     +onClickClose()
     +onClickDownLoad()
+    +createTextForAccepttedContent()
+    +createTextBlob()
 }
 
-App *-- OpinionForm
-App *-- Modalizer
-Modalizer -- SubmitShower
+App o-- OpinionForm
+App o-- Modalizer
+Modalizer -- SubmitIndicator
 
 @enduml

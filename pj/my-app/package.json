@@ -41,6 +41,7 @@
     ]
   },
   "devDependencies": {
+    "moment": "^2.29.1",
     "react-hook-form": "^7.16.1"
   }
 }
