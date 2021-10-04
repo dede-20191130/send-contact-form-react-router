@@ -4,7 +4,7 @@ import moment from 'moment';
 import 'moment/locale/ja';
 
 
-interface accepttedContentData {
+export interface accepttedContentData {
     name: string,
     gender: string,
     age: string,
@@ -73,6 +73,11 @@ export function SubmitIndicator({ formValues, onCloseModal }: ISubmitIndicatorAr
     const onClickClose = () => {
         onCloseModal();
     };
+
+    useEffect(() => {
+        // focus modal-screen
+        document.getElementById("modal-download")?.focus()
+    }, []);
 
     return (
         <>
