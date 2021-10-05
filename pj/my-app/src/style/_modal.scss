@@ -1,4 +1,4 @@
-@use "mixin" as m;
+@import "mixin";
 
 html,
 body {
@@ -41,7 +41,7 @@ body {
         }
     }
     &-download {
-        @include m.borderless-button(#364e96, #fff);
+        @include borderless-button(#364e96, #fff);
         width: 70%;
         margin-top: 20px;
     }
@@ -49,7 +49,7 @@ body {
         font-weight: bold;
         display: inline-block;
         cursor: pointer;
-        @include m.absolute($top: 5px, $right: 10px);
+        @include absolute($top: 5px, $right: 10px);
     }
 }
 

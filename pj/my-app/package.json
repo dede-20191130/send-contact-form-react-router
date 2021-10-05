@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "moment": "^2.29.1",
+    "node-sass": "^6.0.1",
     "react-hook-form": "^7.16.1"
   }
 }

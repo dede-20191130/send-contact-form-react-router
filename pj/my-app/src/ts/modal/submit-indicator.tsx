@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 import moment from 'moment';
 import 'moment/locale/ja';
 
@@ -57,10 +56,10 @@ export function createTextBlob(text: string) {
 
 export function SubmitIndicator({ formValues, onCloseModal }: ISubmitIndicatorArgs) {
 
-    const [data, setData] = useState<accepttedContentData>(formValues);
+    // const [data, setData] = useState<accepttedContentData>(formValues);
 
     const onClickDownload = () => {
-        const text = createTextForAccepttedContent(data);
+        const text = createTextForAccepttedContent(formValues);
         const link = document.createElement("a");
         link.download = "受理内容.txt";
         link.href = createTextBlob(text);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 interface OpinionFormArgs {
@@ -19,7 +19,10 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
         formState: { errors, isSubmitSuccessful, submitCount },
         reset
     } = useForm<IFormInput>({
-        criteriaMode: "all"
+        criteriaMode: "all",
+        defaultValues: {
+            fgender: "0"
+        }
     });
 
     const onFormSubmit = (data: IFormInput) => {
@@ -32,8 +35,9 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
         if (isSubmitSuccessful) {
             reset();
         }
-    }, [submitCount, reset]);
+    }, [submitCount, reset, isSubmitSuccessful]);
 
+    // console.log(errors);//todo
     return (
         <form
             id="opinion-send" name="opinion-send" autoComplete="on"
@@ -45,9 +49,8 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
                     id="fname"
                     type="text"
                     {...register("fname", {
-                        required: true,
-                        minLength: 1,
-                        maxLength: 20
+                        required: "名前は必須です。",
+                        maxLength: { value: 20, message: "名前は1～20文字で入力してください。" }
                     })}
                 />
                 <label htmlFor="fname">ご氏名: </label>
@@ -60,7 +63,7 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
                     <input
                         type="radio" id="fgender-other"
                         {...register("fgender", { required: true })}
-                        value="0" checked
+                        value="0"
                     />
                     <label htmlFor="fgender-other">
                         その他
@@ -88,9 +91,9 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
                     id="fage"
                     type="number"
                     {...register("fage", {
-                        required: true,
-                        min: 0,
-                        pattern: /[0-9]+/
+                        required: "年齢は必須です。",
+                        min: { value: 0, message: "年齢を正しく入力してください。" },
+                        pattern: { value: /[0-9]+/, message: "年齢を正しく入力してください（数字のみ）。" }
                     })}
                 />
                 <label htmlFor="fage">ご年齢:</label>
@@ -101,8 +104,8 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
                 <input
                     type="text" id="faddress"
                     {...register("faddress", {
-                        required: true,
-                        maxLength: 100,
+                        required: "住所は必須です。",
+                        maxLength: { value: 100, message: "住所は100文字以内で入力してください。" },
                     })}
                 />
                 <label htmlFor="faddress">ご住所:</label>
@@ -113,8 +116,8 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
                 <textarea
                     id="fmessage"
                     {...register("fmessage", {
-                        required: true,
-                        maxLength: 2000,
+                        required: "ご意見を入力してください。",
+                        maxLength: { value: 2000, message: "ご意見は1～2000文字で入力してください。" },
                     })}
                 />
                 <label htmlFor="fmessage">ご意見:</label>
@@ -122,7 +125,7 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
 
             </div>
             <div className="controls">
-                <input type="button" id="fbutton" name="fbutton" value="Submit" />
+                <input type="submit" id="fbutton" name="fbutton" value="Submit" />
                 <input type="button" value="Reset" onClick={() => reset()} />
             </div>
         </form>

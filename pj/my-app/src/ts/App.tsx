@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { OpinionForm, IFormInput } from './form/opinion-form';
 import { Modalizer } from './modal/modalizer';
 import { SubmitIndicator, accepttedContentData } from './modal/submit-indicator';
@@ -33,7 +33,7 @@ function App() {
       setIsShowModal(false);
       activeElementStocked?.focus();
     },
-    [setIsShowModal],
+    [setIsShowModal, activeElementStocked],
   )
 
   return (

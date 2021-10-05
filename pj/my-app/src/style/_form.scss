@@ -1,6 +1,5 @@
 // ** Reference:https://codepen.io/andiio/pen/tFECp **
-@use "sass:math";
-@use "mixin" as m;
+@import "mixin";
 
 $border: #c6c6c6;
 $border-focus: #9fb1c1;
@@ -100,7 +99,7 @@ $form-color: #364e96;
                 }
             }
             label {
-                width: math.div(1, 3.11) * 100%;
+                width: (1/ 3.11) * 100%;
                 text-align: center;
                 display: inline-block;
                 box-sizing: border-box;
@@ -120,7 +119,7 @@ $form-color: #364e96;
         }
         input[type="button"],
         input[type="reset"] {
-            @include m.borderless-button($form-color,#fff);
+            @include borderless-button($form-color, #fff);
             width: 25%;
             height: 100%;
         }

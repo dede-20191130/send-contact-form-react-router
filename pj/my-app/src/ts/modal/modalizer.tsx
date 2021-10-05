@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, } from "react";
 import { createPortal } from 'react-dom'
-import { useForm } from "react-hook-form";
 
 interface IModalizerArgs {
     modalContainer: HTMLElement,
@@ -8,14 +7,14 @@ interface IModalizerArgs {
 }
 
 export function Modalizer({ modalContainer, children }: IModalizerArgs) {
-    const el = useRef(document.createElement("div"));
+    const el = document.createElement("div");
     useEffect(() => {
-        modalContainer.append(el.current);
+        modalContainer.append(el);
         return () => {
-            el.current.remove();
+            el.remove();
         };
-    }, []);
+    }, [modalContainer, el]);
 
-    return createPortal(children, el.current);
+    return createPortal(children, el);
 }
 
