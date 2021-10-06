@@ -118,14 +118,29 @@ $form-color: #364e96;
             height: 200px;
         }
         input[type="button"],
+        input[type="submit"],
         input[type="reset"] {
             @include borderless-button($form-color, #fff);
             width: 25%;
             height: 100%;
         }
     }
-    .error-area {
+    p[role="alert"] {
         color: red;
-        background-color: rgba($color: red, $alpha: 0.2);
+        background-color: rgba($color: red, $alpha: 0.1);
+        width: 100%;
+        margin-top: -7px;
+        margin-bottom: 15px;
+        padding:0 12px;
+        text-align: center;
+    }
+}
+
+.gapped-inlines {
+    input,
+    button {
+        &:not(:last-child) {
+            margin-right: 2px;
+        }
     }
 }

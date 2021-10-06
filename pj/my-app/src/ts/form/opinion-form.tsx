@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, FocusEventHandler } from "react";
 import { useForm } from "react-hook-form";
 
 interface OpinionFormArgs {
@@ -29,6 +29,21 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
         onSubmit(data);
     }
 
+    const onInputFocus: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (ev) => {
+        document
+            .querySelector(`label[for="${ev.currentTarget?.id}"]`)
+            ?.classList.add("active");
+    }
+
+    const onInputBlur: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (ev) => {
+        if (ev.currentTarget.value === "") {
+            document
+                .querySelector(`label[for="${ev.currentTarget?.id}"]`)
+                ?.classList.remove("active");
+
+        }
+    }
+
     // delete data after submission
     // https://codesandbox.io/s/react-hook-form-handlesubmit-with-reset-xu1zu?file=/src/index.js
     useEffect(() => {
@@ -37,7 +52,6 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
         }
     }, [submitCount, reset, isSubmitSuccessful]);
 
-    // console.log(errors);//todo
     return (
         <form
             id="opinion-send" name="opinion-send" autoComplete="on"
@@ -52,6 +66,7 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
                         required: "名前は必須です。",
                         maxLength: { value: 20, message: "名前は1～20文字で入力してください。" }
                     })}
+                    onFocus={onInputFocus} onBlur={onInputBlur}
                 />
                 <label htmlFor="fname">ご氏名: </label>
                 {errors?.fname && <p role="alert">{errors.fname.message}</p>}
@@ -95,6 +110,7 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
                         min: { value: 0, message: "年齢を正しく入力してください。" },
                         pattern: { value: /[0-9]+/, message: "年齢を正しく入力してください（数字のみ）。" }
                     })}
+                    onFocus={onInputFocus} onBlur={onInputBlur}
                 />
                 <label htmlFor="fage">ご年齢:</label>
                 {errors?.fage && <p role="alert">{errors.fage.message}</p>}
@@ -107,6 +123,7 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
                         required: "住所は必須です。",
                         maxLength: { value: 100, message: "住所は100文字以内で入力してください。" },
                     })}
+                    onFocus={onInputFocus} onBlur={onInputBlur}
                 />
                 <label htmlFor="faddress">ご住所:</label>
                 {errors?.faddress && <p role="alert">{errors.faddress.message}</p>}
@@ -119,12 +136,15 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
                         required: "ご意見を入力してください。",
                         maxLength: { value: 2000, message: "ご意見は1～2000文字で入力してください。" },
                     })}
+                    onFocus={onInputFocus} onBlur={onInputBlur}
                 />
                 <label htmlFor="fmessage">ご意見:</label>
                 {errors?.fmessage && <p role="alert">{errors.fmessage.message}</p>}
 
             </div>
-            <div className="controls">
+            <br />
+            <br />
+            <div className="controls gapped-inlines">
                 <input type="submit" id="fbutton" name="fbutton" value="Submit" />
                 <input type="button" value="Reset" onClick={() => reset()} />
             </div>

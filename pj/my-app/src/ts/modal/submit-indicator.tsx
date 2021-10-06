@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import moment from 'moment';
 import 'moment/locale/ja';
 
@@ -56,8 +56,18 @@ export function createTextBlob(text: string) {
 
 export function SubmitIndicator({ formValues, onCloseModal }: ISubmitIndicatorArgs) {
 
-    // const [data, setData] = useState<accepttedContentData>(formValues);
+    const ref = useRef<HTMLButtonElement>(null)
 
+    useEffect(() => {
+        // focus modal-screen
+        setTimeout(() => {
+            ref.current?.focus()
+        }, 0);
+        document.body.classList.add("preventScroll");
+        return () => {
+            document.body.classList.remove("preventScroll");
+        }
+    }, []);
     const onClickDownload = () => {
         const text = createTextForAccepttedContent(formValues);
         const link = document.createElement("a");
@@ -73,17 +83,12 @@ export function SubmitIndicator({ formValues, onCloseModal }: ISubmitIndicatorAr
         onCloseModal();
     };
 
-    useEffect(() => {
-        // focus modal-screen
-        document.getElementById("modal-download")?.focus()
-    }, []);
-
     return (
         <>
             <div id="modal-container" >
                 <div id="modal-box">
                     <div id="modal-message">ご意見を受け付けました。</div>
-                    <button id="modal-download" onClick={onClickDownload}>送信内容のダウンロード</button>
+                    <button id="modal-download" onClick={onClickDownload} ref={ref}>送信内容のダウンロード</button>
                     <div id="modal-close" tabIndex={0}
                         role="button" aria-label="閉じる"
                         onClick={onClickClose}
@@ -94,3 +99,5 @@ export function SubmitIndicator({ formValues, onCloseModal }: ISubmitIndicatorAr
         </>
     )
 }
+
+

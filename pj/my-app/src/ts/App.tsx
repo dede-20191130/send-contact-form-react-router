@@ -33,13 +33,15 @@ function App() {
       setIsShowModal(false);
       activeElementStocked?.focus();
     },
-    [setIsShowModal, activeElementStocked],
+    [setIsShowModal, activeElementStocked]
   )
 
   return (
     <>
       <div id="temp-page-top" style={{ marginBottom: "50px" }}  > </div>
-      <OpinionForm onSubmit={onSubmit}></OpinionForm>
+      <div className="normal-form-container">
+        <OpinionForm onSubmit={onSubmit}></OpinionForm>
+      </div>
       {isShowModal && modalContainer &&
         <Modalizer modalContainer={modalContainer}>
           <SubmitIndicator formValues={formValues} onCloseModal={onCloseModal} />
