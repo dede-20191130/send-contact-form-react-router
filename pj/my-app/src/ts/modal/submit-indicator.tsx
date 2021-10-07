@@ -1,23 +1,21 @@
 import { useEffect, useRef } from "react";
-import moment from 'moment';
-import 'moment/locale/ja';
-
+import moment from "moment";
+import "moment/locale/ja";
 
 export interface accepttedContentData {
-    name: string,
-    gender: string,
-    age: string,
-    address: string,
-    message: string,
+    name: string;
+    gender: string;
+    age: string;
+    address: string;
+    message: string;
 }
 
 interface ISubmitIndicatorArgs {
-    formValues: accepttedContentData,
-    onCloseModal: () => void
+    formValues: accepttedContentData;
+    onCloseModal: () => void;
 }
 
 export function createTextForAccepttedContent(data: accepttedContentData) {
-
     const textTemplate = `※ご意見フォーム送信フェイク※
     下記内容で承りました。
     
@@ -54,19 +52,21 @@ export function createTextBlob(text: string) {
     return URL.createObjectURL(blob);
 }
 
-export function SubmitIndicator({ formValues, onCloseModal }: ISubmitIndicatorArgs) {
-
-    const ref = useRef<HTMLButtonElement>(null)
+export function SubmitIndicator({
+    formValues,
+    onCloseModal,
+}: ISubmitIndicatorArgs) {
+    const ref = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
         // focus modal-screen
         setTimeout(() => {
-            ref.current?.focus()
+            ref.current?.focus();
         }, 0);
         document.body.classList.add("preventScroll");
         return () => {
             document.body.classList.remove("preventScroll");
-        }
+        };
     }, []);
     const onClickDownload = () => {
         const text = createTextForAccepttedContent(formValues);
@@ -85,19 +85,28 @@ export function SubmitIndicator({ formValues, onCloseModal }: ISubmitIndicatorAr
 
     return (
         <>
-            <div id="modal-container" >
+            <div id="modal-container">
                 <div id="modal-box">
                     <div id="modal-message">ご意見を受け付けました。</div>
-                    <button id="modal-download" onClick={onClickDownload} ref={ref}>送信内容のダウンロード</button>
-                    <div id="modal-close" tabIndex={0}
-                        role="button" aria-label="閉じる"
+                    <button
+                        id="modal-download"
+                        onClick={onClickDownload}
+                        ref={ref}
+                    >
+                        送信内容のダウンロード
+                    </button>
+                    <div
+                        id="modal-close"
+                        tabIndex={0}
+                        role="button"
+                        aria-label="閉じる"
                         onClick={onClickClose}
-                    >✕</div>
+                    >
+                        ✕
+                    </div>
                 </div>
             </div>
-            <div id="cover-div" ></div>
+            <div id="cover-div"></div>
         </>
-    )
+    );
 }
-
-

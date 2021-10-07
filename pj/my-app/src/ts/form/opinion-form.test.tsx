@@ -1,38 +1,48 @@
-import React from 'react'
-import { screen, render, fireEvent, waitFor, RenderResult } from '@testing-library/react'
-import { OpinionForm } from './opinion-form';
+import React from "react";
+import {
+    screen,
+    render,
+    fireEvent,
+    waitFor,
+    RenderResult,
+} from "@testing-library/react";
+import { OpinionForm } from "./opinion-form";
 
 const mockedPropOnSubmit = jest.fn();
 
 function inputProperVals(renderResult: RenderResult) {
     fireEvent.input(renderResult.getByRole("textbox", { name: /ご氏名\:/ }), {
         target: {
-            value: "standard name"
-        }
+            value: "standard name",
+        },
     });
-    fireEvent.input(renderResult.getByRole("spinbutton", { name: /ご年齢\:/ }), {
-        target: {
-            value: "20"
+    fireEvent.input(
+        renderResult.getByRole("spinbutton", { name: /ご年齢\:/ }),
+        {
+            target: {
+                value: "20",
+            },
         }
-    });
+    );
     fireEvent.input(renderResult.getByRole("textbox", { name: /ご住所\:/ }), {
         target: {
-            value: "Nagoya City; Aichi Prefecture"
-        }
+            value: "Nagoya City; Aichi Prefecture",
+        },
     });
     fireEvent.input(renderResult.getByRole("textbox", { name: /ご意見\:/ }), {
         target: {
-            value: "this is a opinion for this site."
-        }
+            value: "this is a opinion for this site.",
+        },
     });
-
 }
 
 describe("OpinionForm", () => {
     let renderResult: RenderResult;
 
     beforeEach(() => {
-        renderResult = render(<OpinionForm onSubmit={mockedPropOnSubmit}></OpinionForm>)
+        renderResult = render(
+            <OpinionForm onSubmit={mockedPropOnSubmit}></OpinionForm>
+        );
     });
 
     afterEach(() => {
@@ -40,21 +50,21 @@ describe("OpinionForm", () => {
         mockedPropOnSubmit.mockClear();
     });
 
-    it('should display required error when value is invalid', async () => {
+    it("should display required error when value is invalid", async () => {
         fireEvent.submit(screen.getByRole("button", { name: "Submit" }));
 
         expect(await screen.findAllByRole("alert")).toHaveLength(4);
         expect(mockedPropOnSubmit).not.toHaveBeenCalled();
     });
 
-    it('should display matching error when fname is invalid', async () => {
+    it("should display matching error when fname is invalid", async () => {
         inputProperVals(renderResult);
 
         // vacant input
         fireEvent.input(screen.getByRole("textbox", { name: /ご氏名\:/ }), {
             target: {
-                value: ""
-            }
+                value: "",
+            },
         });
 
         fireEvent.submit(screen.getByRole("button", { name: "Submit" }));
@@ -62,14 +72,18 @@ describe("OpinionForm", () => {
         expect(await screen.findAllByRole("alert")).toHaveLength(1);
         expect(mockedPropOnSubmit).not.toHaveBeenCalled();
         expect(
-            (screen.getByRole("textbox", { name: /ご氏名\:/ }) as HTMLInputElement).value
+            (
+                screen.getByRole("textbox", {
+                    name: /ご氏名\:/,
+                }) as HTMLInputElement
+            ).value
         ).toBe("");
 
         // over 21
         fireEvent.input(screen.getByRole("textbox", { name: /ご氏名\:/ }), {
             target: {
-                value: "A".repeat(21)
-            }
+                value: "A".repeat(21),
+            },
         });
 
         fireEvent.submit(screen.getByRole("button", { name: "Submit" }));
@@ -77,77 +91,108 @@ describe("OpinionForm", () => {
         expect(await screen.findAllByRole("alert")).toHaveLength(1);
         expect(mockedPropOnSubmit).not.toHaveBeenCalled();
         expect(
-            (screen.getByRole("textbox", { name: /ご氏名\:/ }) as HTMLInputElement).value
+            (
+                screen.getByRole("textbox", {
+                    name: /ご氏名\:/,
+                }) as HTMLInputElement
+            ).value
         ).toBe("A".repeat(21));
     });
-    it('should display matching error when fage is invalid', async () => {
+    it("should display matching error when fage is invalid", async () => {
         inputProperVals(renderResult);
 
         // under 0
-        fireEvent.input(renderResult.getByRole("spinbutton", { name: /ご年齢\:/ }), {
-            target: {
-                value: "-1"
+        fireEvent.input(
+            renderResult.getByRole("spinbutton", { name: /ご年齢\:/ }),
+            {
+                target: {
+                    value: "-1",
+                },
             }
-        });
+        );
 
         fireEvent.submit(screen.getByRole("button", { name: "Submit" }));
 
         expect(await screen.findAllByRole("alert")).toHaveLength(1);
         expect(mockedPropOnSubmit).not.toHaveBeenCalled();
         expect(
-            (screen.getByRole("spinbutton", { name: /ご年齢\:/ }) as HTMLInputElement).value
+            (
+                screen.getByRole("spinbutton", {
+                    name: /ご年齢\:/,
+                }) as HTMLInputElement
+            ).value
         ).toBe("-1");
 
         // not nummeric
-        fireEvent.input(renderResult.getByRole("spinbutton", { name: /ご年齢\:/ }), {
-            target: {
-                value: "11 old"
+        fireEvent.input(
+            renderResult.getByRole("spinbutton", { name: /ご年齢\:/ }),
+            {
+                target: {
+                    value: "11 old",
+                },
             }
-        });
+        );
 
         fireEvent.submit(screen.getByRole("button", { name: "Submit" }));
 
         expect(await screen.findAllByRole("alert")).toHaveLength(1);
         expect(mockedPropOnSubmit).not.toHaveBeenCalled();
         expect(
-            (screen.getByRole("spinbutton", { name: /ご年齢\:/ }) as HTMLInputElement).value
+            (
+                screen.getByRole("spinbutton", {
+                    name: /ご年齢\:/,
+                }) as HTMLInputElement
+            ).value
         ).toBe("");
-
     });
-    it('should display matching error when faddress is invalid', async () => {
+    it("should display matching error when faddress is invalid", async () => {
         inputProperVals(renderResult);
 
         // over 100
-        fireEvent.input(renderResult.getByRole("textbox", { name: /ご住所\:/ }), {
-            target: {
-                value: "A".repeat(101)
+        fireEvent.input(
+            renderResult.getByRole("textbox", { name: /ご住所\:/ }),
+            {
+                target: {
+                    value: "A".repeat(101),
+                },
             }
-        });
+        );
 
         fireEvent.submit(screen.getByRole("button", { name: "Submit" }));
 
         expect(await screen.findAllByRole("alert")).toHaveLength(1);
         expect(mockedPropOnSubmit).not.toHaveBeenCalled();
         expect(
-            (screen.getByRole("textbox", { name: /ご住所\:/ }) as HTMLInputElement).value
+            (
+                screen.getByRole("textbox", {
+                    name: /ご住所\:/,
+                }) as HTMLInputElement
+            ).value
         ).toBe("A".repeat(101));
     });
-    it('should display matching error when fmessage is invalid', async () => {
+    it("should display matching error when fmessage is invalid", async () => {
         inputProperVals(renderResult);
 
         // over 2000
-        fireEvent.input(renderResult.getByRole("textbox", { name: /ご意見\:/ }), {
-            target: {
-                value: "A".repeat(2001)
+        fireEvent.input(
+            renderResult.getByRole("textbox", { name: /ご意見\:/ }),
+            {
+                target: {
+                    value: "A".repeat(2001),
+                },
             }
-        });
+        );
 
         fireEvent.submit(screen.getByRole("button", { name: "Submit" }));
 
         expect(await screen.findAllByRole("alert")).toHaveLength(1);
         expect(mockedPropOnSubmit).not.toHaveBeenCalled();
         expect(
-            (screen.getByRole("textbox", { name: /ご意見\:/ }) as HTMLInputElement).value
+            (
+                screen.getByRole("textbox", {
+                    name: /ご意見\:/,
+                }) as HTMLInputElement
+            ).value
         ).toBe("A".repeat(2001));
     });
     it("should not display error when value is valid", async () => {
@@ -157,7 +202,9 @@ describe("OpinionForm", () => {
 
         fireEvent.submit(screen.getByRole("button", { name: "Submit" }));
 
-        await waitFor(() => expect(screen.queryAllByRole("alert")).toHaveLength(0));
+        await waitFor(() =>
+            expect(screen.queryAllByRole("alert")).toHaveLength(0)
+        );
 
         // onsubmit called
         expect(mockedPropOnSubmit).toBeCalledWith({
@@ -165,21 +212,37 @@ describe("OpinionForm", () => {
             fgender: "1",
             fage: "20",
             faddress: "Nagoya City; Aichi Prefecture",
-            fmessage: "this is a opinion for this site."
+            fmessage: "this is a opinion for this site.",
         });
 
         // data-cleaned after submit
         expect(
-            (screen.getByRole("textbox", { name: /ご氏名\:/ }) as HTMLInputElement).value
+            (
+                screen.getByRole("textbox", {
+                    name: /ご氏名\:/,
+                }) as HTMLInputElement
+            ).value
         ).toBe("");
         expect(
-            (screen.getByRole("spinbutton", { name: /ご年齢\:/ }) as HTMLInputElement).value
+            (
+                screen.getByRole("spinbutton", {
+                    name: /ご年齢\:/,
+                }) as HTMLInputElement
+            ).value
         ).toBe("");
         expect(
-            (screen.getByRole("textbox", { name: /ご住所\:/ }) as HTMLInputElement).value
+            (
+                screen.getByRole("textbox", {
+                    name: /ご住所\:/,
+                }) as HTMLInputElement
+            ).value
         ).toBe("");
         expect(
-            (screen.getByRole("textbox", { name: /ご意見\:/ }) as HTMLInputElement).value
+            (
+                screen.getByRole("textbox", {
+                    name: /ご意見\:/,
+                }) as HTMLInputElement
+            ).value
         ).toBe("");
     });
     it("should delete data after reset button works", async () => {
@@ -189,21 +252,38 @@ describe("OpinionForm", () => {
 
         fireEvent.submit(screen.getByRole("button", { name: "Reset" }));
 
-        await waitFor(() => expect(screen.queryAllByRole("alert")).toHaveLength(0));
+        await waitFor(() =>
+            expect(screen.queryAllByRole("alert")).toHaveLength(0)
+        );
 
         // data-cleaned after reset
         expect(
-            (screen.getByRole("textbox", { name: /ご氏名\:/ }) as HTMLInputElement).value
+            (
+                screen.getByRole("textbox", {
+                    name: /ご氏名\:/,
+                }) as HTMLInputElement
+            ).value
         ).toBe("");
         expect(
-            (screen.getByRole("spinbutton", { name: /ご年齢\:/ }) as HTMLInputElement).value
+            (
+                screen.getByRole("spinbutton", {
+                    name: /ご年齢\:/,
+                }) as HTMLInputElement
+            ).value
         ).toBe("");
         expect(
-            (screen.getByRole("textbox", { name: /ご住所\:/ }) as HTMLInputElement).value
+            (
+                screen.getByRole("textbox", {
+                    name: /ご住所\:/,
+                }) as HTMLInputElement
+            ).value
         ).toBe("");
         expect(
-            (screen.getByRole("textbox", { name: /ご意見\:/ }) as HTMLInputElement).value
+            (
+                screen.getByRole("textbox", {
+                    name: /ご意見\:/,
+                }) as HTMLInputElement
+            ).value
         ).toBe("");
     });
-
-})
+});

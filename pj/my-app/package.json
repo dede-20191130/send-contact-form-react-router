@@ -41,8 +41,25 @@
     ]
   },
   "devDependencies": {
+    "husky": "^7.0.2",
+    "lint-staged": "^11.2.0",
     "moment": "^2.29.1",
     "node-sass": "^6.0.1",
+    "prettier": "^2.4.1",
     "react-hook-form": "^7.16.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write"
+    ]
+  },
+  "prettier": {
+    "semi": true,
+    "tabWidth": 4
   }
 }

@@ -1,9 +1,9 @@
-import React, { useEffect, } from "react";
-import { createPortal } from 'react-dom'
+import React, { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface IModalizerArgs {
-    modalContainer: HTMLElement,
-    children: React.ReactNode
+    modalContainer: HTMLElement;
+    children: React.ReactNode;
 }
 
 export function Modalizer({ modalContainer, children }: IModalizerArgs) {
@@ -17,4 +17,3 @@ export function Modalizer({ modalContainer, children }: IModalizerArgs) {
 
     return createPortal(children, el);
 }
-

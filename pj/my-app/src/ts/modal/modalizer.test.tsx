@@ -1,6 +1,12 @@
-import React, { useRef } from 'react'
-import { screen, render, fireEvent, waitFor, RenderResult } from '@testing-library/react'
-import { Modalizer } from './modalizer';
+import React, { useRef } from "react";
+import {
+    screen,
+    render,
+    fireEvent,
+    waitFor,
+    RenderResult,
+} from "@testing-library/react";
+import { Modalizer } from "./modalizer";
 
 function ModalizerTester() {
     const [showModal, setShowModal] = React.useState(false);
@@ -15,7 +21,9 @@ function ModalizerTester() {
                     </Modalizer>
                 )}
 
-                <button onClick={() => setShowModal(!showModal)}>switch Modal</button>
+                <button onClick={() => setShowModal(!showModal)}>
+                    switch Modal
+                </button>
             </div>
         </>
     );
@@ -23,18 +31,17 @@ function ModalizerTester() {
 
 describe("modaliser", () => {
     it("should show modalied box and switch off box when removing Modalier Component", async () => {
-        render(<ModalizerTester />)
+        render(<ModalizerTester />);
 
         // at first there's not modalized box
         expect(screen.queryByText("modaliezd-box")).not.toBeInTheDocument();
 
-        // after switching there's modalized box 
+        // after switching there's modalized box
         fireEvent.click(screen.getByRole("button"));
         expect(screen.getByText("modaliezd-box")).toBeInTheDocument();
 
-        // after second switching there's not modalized box 
+        // after second switching there's not modalized box
         fireEvent.click(screen.getByRole("button"));
         expect(screen.queryByText("modaliezd-box")).not.toBeInTheDocument();
-
     });
 });
