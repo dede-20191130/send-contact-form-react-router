@@ -15,22 +15,23 @@ interface ISubmitIndicatorArgs {
     onCloseModal: () => void;
 }
 
+const textTemplate = `※ご意見フォーム送信フェイク※
+下記内容で承りました。
+
+【氏名】$name
+【性別】$gender
+【年齢】$age歳
+【住所】$address
+【ご意見内容】
+$message
+
+-----------------------
+
+受理日時：$date
+
+`;
+
 export function createTextForAccepttedContent(data: accepttedContentData) {
-    const textTemplate = `※ご意見フォーム送信フェイク※
-    下記内容で承りました。
-    
-    【氏名】$name
-    【性別】$gender
-    【年齢】$age歳
-    【住所】$address
-    【ご意見内容】
-    $message
-    
-    -----------------------
-    
-    受理日時：$date
-    
-    `;
 
     // convert gender:int to string
     data.gender = ["その他", "男性", "女性"][Number(data.gender)];
