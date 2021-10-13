@@ -1,22 +1,20 @@
 import { useState, useCallback } from "react";
+import { Switch, Route, Redirect } from 'react-router-dom'
+import { Header } from './header/header'
+import { Footer } from './header/footer'
+import { Home } from './home/home'
 import { OpinionForm, IFormInput } from "./form/opinion-form";
-import { Modalizer } from "./modal/modalizer";
 import {
     SubmitIndicator,
     accepttedContentData,
-} from "./modal/submit-indicator";
+} from "./result-page/submit-indicator";
 
 function App() {
-    const [isShowModal, setIsShowModal] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const [formValues, setFormValues] = useState<accepttedContentData>(
         {} as accepttedContentData
     );
-    const [activeElementStocked, setActiveElementStocked] =
-        useState<HTMLElement | null>(null);
-
-    const modalContainer = document.getElementById("modal-root");
-
-    const onSubmit = useCallback(
+    const handleSubmit = useCallback(
         (data: IFormInput) => {
             setFormValues({
                 name: data.fname,
@@ -26,35 +24,44 @@ function App() {
                 message: data.fmessage,
             });
 
-            setIsShowModal(true);
-            if (document.activeElement instanceof HTMLElement) {
-                setActiveElementStocked(document.activeElement);
-            }
+            setIsSubmitted(true);
         },
-        [setIsShowModal]
+        [setIsSubmitted]
     );
-
-    const onCloseModal = useCallback(() => {
-        setIsShowModal(false);
-        activeElementStocked?.focus();
-    }, [setIsShowModal, activeElementStocked]);
 
     return (
         <>
-            <div id="temp-page-top" style={{ marginBottom: "50px" }}>
-                {" "}
-            </div>
-            <div className="normal-form-container">
-                <OpinionForm onSubmit={onSubmit}></OpinionForm>
-            </div>
-            {isShowModal && modalContainer && (
-                <Modalizer modalContainer={modalContainer}>
+            <Header />
+            <Switch>
+                <Route exact path="/">
+                    <Home />
+                </Route>
+                <Route path="/opinion-form">
+                    <div className="normal-form-container">
+                        <OpinionForm onSubmit={handleSubmit}></OpinionForm>
+                    </div>
+                </Route>
+                <Route path="/result">
+                    <Home />
+                </Route>
+                {isSubmitted ? (
                     <SubmitIndicator
                         formValues={formValues}
-                        onCloseModal={onCloseModal}
+                        setIsSubmitted={setIsSubmitted}
                     />
-                </Modalizer>
-            )}
+                ) : (
+                    <Redirect to="/" />
+                )}
+                {/* 404 error page */}
+                <Route path="*">
+                    <div>
+                        <h3>
+                            No match for <code>{location.pathname}</code>
+                        </h3>
+                    </div>
+                </Route>
+            </Switch>
+            <Footer />
         </>
     );
 }

@@ -2,48 +2,62 @@
 
 class App << (C,yellow) Container>> {
     ==state==
-    ~isShowModal
+    ~isSubmitted
     ~formValues
-    ~activeElemStocked
     ==methods==
-    +onSubmit()
-    +onCloseModal()
+    +handleSubmit()
 
 }
 
+class Header << (C,green) Component>> {
+    ヘッダー
+    ==inner-component==
+    <Link>:/
+    <Link>:/opinion-form
+}
+class Footer << (C,green) Component>> {
+    フッター
+}
+class Home << (C,green) Component>> {
+    Homeページ
+    ==URL==
+    /
+}
+
+
 class OpinionForm << (C,green) Component>> {
-    ご意見フォーム
+    ご意見フォームページ
+    ==URL==
+    /opinion-form
     ==state==
-    ~methods:useForm
+    ~RHF-methods:useForm
     ==props==
     #onSubmit()
     ==methods==
-    +onSubmit()
+    +onFormSubmit()
+    ==inner-component==
+    <Prompt>:ページ遷移前に警告
 }
 
-class Modalizer << (C,lightblue) Higher-Order Component>> {
-    子要素をモーダル化
-    ==props==
-    #modalContainer
-    #children
-    ==return==
-    +createPortal()
-}
 
 class SubmitIndicator << (C,green) Component>> {
-    送信完了表示ポップアップ
+    送信完了表示ページ
+    ==URL==
+    /result
     ==props==
+    #setIsSubmitted
     #formValues
-    #onCloseModal
     ==methods==
-    +onClickClose()
     +onClickDownLoad()
     +createTextForAccepttedContent()
     +createTextBlob()
+    +parseGender()
 }
 
+App o-- Header
+App o-- Footer
+App o-- Home
 App o-- OpinionForm
-App o-- Modalizer
-Modalizer -- SubmitIndicator
+App o-- SubmitIndicator
 
 @enduml

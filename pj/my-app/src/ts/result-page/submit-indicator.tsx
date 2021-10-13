@@ -11,8 +11,8 @@ export interface accepttedContentData {
 }
 
 interface ISubmitIndicatorArgs {
+    setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     formValues: accepttedContentData;
-    onCloseModal: () => void;
 }
 
 const textTemplate = `※ご意見フォーム送信フェイク※
@@ -31,10 +31,14 @@ $message
 
 `;
 
-export function createTextForAccepttedContent(data: accepttedContentData) {
+function parseGender(gender: string) {
+    return ["その他", "男性", "女性"][Number(gender)];
+}
+
+export function createTextForAccepttedContent(data: accepttedContentData, submiteedDate: string) {
 
     // convert gender:int to string
-    data.gender = ["その他", "男性", "女性"][Number(data.gender)];
+    data.gender = parseGender(data.gender);
 
     let text = textTemplate;
     let key: keyof accepttedContentData;
@@ -43,7 +47,7 @@ export function createTextForAccepttedContent(data: accepttedContentData) {
             text = text.replace("$" + key, data[key]);
         }
     }
-    text = text.replace("$date", moment().format("YYYY年MM月DD日"));
+    text = text.replace("$date", submiteedDate);
 
     return text;
 }
@@ -55,22 +59,18 @@ export function createTextBlob(text: string) {
 
 export function SubmitIndicator({
     formValues,
-    onCloseModal,
+    setIsSubmitted,
 }: ISubmitIndicatorArgs) {
-    const ref = useRef<HTMLButtonElement>(null);
+
+    const submiteedDate = moment().format("YYYY年MM月DD日");
 
     useEffect(() => {
-        // focus modal-screen
-        setTimeout(() => {
-            ref.current?.focus();
-        }, 0);
-        document.body.classList.add("preventScroll");
         return () => {
-            document.body.classList.remove("preventScroll");
-        };
+            setIsSubmitted(false);
+        }
     }, []);
     const onClickDownload = () => {
-        const text = createTextForAccepttedContent(formValues);
+        const text = createTextForAccepttedContent(formValues, submiteedDate);
         const link = document.createElement("a");
         link.download = "受理内容.txt";
         link.href = createTextBlob(text);
@@ -80,34 +80,44 @@ export function SubmitIndicator({
         URL.revokeObjectURL(link.href);
     };
 
-    const onClickClose = () => {
-        onCloseModal();
-    };
-
     return (
         <>
             <div id="modal-container">
                 <div id="modal-box">
-                    <div id="modal-message">ご意見を受け付けました。</div>
+                    <h2 id="modal-message">ご意見を受け付けました。</h2>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>氏名</td>
+                                <td>{formValues.name}</td>
+                            </tr>
+                            <tr>
+                                <td>性別</td>
+                                <td>{parseGender(formValues.gender)}</td>
+                            </tr>
+                            <tr>
+                                <td>年齢</td>
+                                <td>{formValues.age}</td>
+                            </tr>
+                            <tr>
+                                <td>住所</td>
+                                <td>{formValues.address}</td>
+                            </tr>
+                            <tr>
+                                <td>ご意見内容</td>
+                                <td>{formValues.message}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>受理日時：{submiteedDate}</p>
                     <button
                         id="modal-download"
                         onClick={onClickDownload}
-                        ref={ref}
                     >
                         送信内容のダウンロード
                     </button>
-                    <div
-                        id="modal-close"
-                        tabIndex={0}
-                        role="button"
-                        aria-label="閉じる"
-                        onClick={onClickClose}
-                    >
-                        ✕
-                    </div>
                 </div>
             </div>
-            <div id="cover-div"></div>
         </>
     );
 }

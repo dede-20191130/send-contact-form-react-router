@@ -102,7 +102,7 @@ describe("SubmitIndicator", () => {
         };
         onCloseModal = jest.fn();
         render(
-            <SubmitIndicator formValues={data} onCloseModal={onCloseModal} />
+            <SubmitIndicator formValues={data} setIsSubmitted={onCloseModal} />
         );
     });
 
