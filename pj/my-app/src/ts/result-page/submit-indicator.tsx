@@ -97,7 +97,7 @@ export function SubmitIndicator({
                             </tr>
                             <tr>
                                 <td>年齢</td>
-                                <td>{formValues.age}</td>
+                                <td>{formValues.age} 歳</td>
                             </tr>
                             <tr>
                                 <td>住所</td>

@@ -8,6 +8,7 @@ import {
     SubmitIndicator,
     accepttedContentData,
 } from "./result-page/submit-indicator";
+import { NoMatch } from './error-pages/nomatch'
 
 function App() {
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -32,35 +33,32 @@ function App() {
     return (
         <>
             <Header />
-            <Switch>
-                <Route exact path="/">
-                    <Home />
-                </Route>
-                <Route path="/opinion-form">
-                    <div className="normal-form-container">
-                        <OpinionForm onSubmit={handleSubmit}></OpinionForm>
-                    </div>
-                </Route>
-                <Route path="/result">
-                    <Home />
-                </Route>
-                {isSubmitted ? (
-                    <SubmitIndicator
-                        formValues={formValues}
-                        setIsSubmitted={setIsSubmitted}
-                    />
-                ) : (
-                    <Redirect to="/" />
-                )}
-                {/* 404 error page */}
-                <Route path="*">
-                    <div>
-                        <h3>
-                            No match for <code>{location.pathname}</code>
-                        </h3>
-                    </div>
-                </Route>
-            </Switch>
+            <main>
+                <Switch>
+                    <Route exact path="/">
+                        <Home />
+                    </Route>
+                    <Route path="/opinion-form">
+                        <div className="normal-form-container">
+                            <OpinionForm onSubmit={handleSubmit}></OpinionForm>
+                        </div>
+                    </Route>
+                    <Route path="/result">
+                        {isSubmitted ? (
+                            <SubmitIndicator
+                                formValues={formValues}
+                                setIsSubmitted={setIsSubmitted}
+                            />
+                        ) : (
+                            <Redirect to="/" />
+                        )}
+                    </Route>
+                    {/* 404 error page */}
+                    <Route path="*">
+                        <NoMatch />
+                    </Route>
+                </Switch>
+            </main>
             <Footer />
         </>
     );

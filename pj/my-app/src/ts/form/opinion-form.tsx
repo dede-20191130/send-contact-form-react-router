@@ -1,4 +1,4 @@
-import { useEffect, FocusEventHandler } from "react";
+import { useState, FocusEventHandler } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory, Prompt } from 'react-router-dom'
 
@@ -14,10 +14,13 @@ export interface IFormInput {
     fmessage: string;
 }
 export function OpinionForm({ onSubmit }: OpinionFormArgs) {
+    const history = useHistory();
+    const [onSubmitting, setOnSubmitting] = useState(false)
+
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitSuccessful, submitCount },
+        formState: { errors, isDirty },
         reset,
     } = useForm<IFormInput>({
         criteriaMode: "all",
@@ -28,7 +31,8 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
 
     const onFormSubmit = (data: IFormInput) => {
         onSubmit(data);
-        useHistory().push("/result");
+        setOnSubmitting(true);
+        history.push("/result");
     };
 
     const onInputFocus: FocusEventHandler<
@@ -178,7 +182,7 @@ export function OpinionForm({ onSubmit }: OpinionFormArgs) {
                 </div>
             </form>
             <Prompt
-                when={!isSubmitSuccessful}
+                when={isDirty && (!onSubmitting)}
                 message={location =>
                     `フォームに入力中です。${location.pathname}に移動しますか？`
                 }

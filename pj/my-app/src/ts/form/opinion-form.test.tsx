@@ -7,6 +7,7 @@ import {
     RenderResult,
 } from "@testing-library/react";
 import { OpinionForm } from "./opinion-form";
+import { MemoryRouter, Route } from 'react-router-dom'
 
 const mockedPropOnSubmit = jest.fn();
 
@@ -41,7 +42,14 @@ describe("OpinionForm", () => {
 
     beforeEach(() => {
         renderResult = render(
-            <OpinionForm onSubmit={mockedPropOnSubmit}></OpinionForm>
+            <MemoryRouter >
+                <Route path="/">
+                    <OpinionForm onSubmit={mockedPropOnSubmit}></OpinionForm>
+                </Route>
+                <Route path="/result">
+                    <p>this is a result</p>
+                </Route>
+            </MemoryRouter>
         );
     });
 
@@ -215,42 +223,17 @@ describe("OpinionForm", () => {
             fmessage: "this is a opinion for this site.",
         });
 
-        // data-cleaned after submit
-        expect(
-            (
-                screen.getByRole("textbox", {
-                    name: /ご氏名\:/,
-                }) as HTMLInputElement
-            ).value
-        ).toBe("");
-        expect(
-            (
-                screen.getByRole("spinbutton", {
-                    name: /ご年齢\:/,
-                }) as HTMLInputElement
-            ).value
-        ).toBe("");
-        expect(
-            (
-                screen.getByRole("textbox", {
-                    name: /ご住所\:/,
-                }) as HTMLInputElement
-            ).value
-        ).toBe("");
-        expect(
-            (
-                screen.getByRole("textbox", {
-                    name: /ご意見\:/,
-                }) as HTMLInputElement
-            ).value
-        ).toBe("");
+        // show result screen
+        expect(screen.getByText(/this is a result/i)).toBeInTheDocument();
+
+
     });
     it("should delete data after reset button works", async () => {
         inputProperVals(renderResult);
 
         fireEvent.click(screen.getByLabelText("男性"));
 
-        fireEvent.submit(screen.getByRole("button", { name: "Reset" }));
+        fireEvent.click(screen.getByRole("button", { name: "Reset" }));
 
         await waitFor(() =>
             expect(screen.queryAllByRole("alert")).toHaveLength(0)

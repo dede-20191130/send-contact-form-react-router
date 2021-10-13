@@ -32,7 +32,7 @@ describe("createTextForAccepttedContent", () => {
             address: "example県　田中市佐藤町",
             message: "this is a test message.これはテストメッセージです。",
         };
-        const text = createTextForAccepttedContent(input);
+        const text = createTextForAccepttedContent(input, "2030年11月15日");
 
         expect(text.startsWith("※ご意見フォーム送信フェイク※")).toBe(true);
 
@@ -48,7 +48,7 @@ describe("createTextForAccepttedContent", () => {
             new RegExp("【ご意見内容】[\\s\\S]*" + input.message).test(text)
         ).toBe(true);
 
-        expect(text.includes("受理日時：2021年07月20日")).toBe(true);
+        expect(text.includes("受理日時：2030年11月15日")).toBe(true);
     });
 });
 
@@ -57,7 +57,7 @@ describe("createTextBlob", () => {
         constructor(
             private content: BlobPart[] | undefined,
             private options: BlobPropertyBag | undefined
-        ) {}
+        ) { }
     }
     let bloblstocked: typeof global.Blob;
 
@@ -91,22 +91,30 @@ describe("createTextBlob", () => {
 });
 
 describe("SubmitIndicator", () => {
-    let onCloseModal: jest.Mock<any, any>;
+    let setIsSubmitted: jest.Mock<any, any>;
     beforeEach(() => {
         const data = {
-            name: "",
-            gender: "0",
-            age: "",
-            address: "",
-            message: "",
+            name: "standard name",
+            gender: "1",
+            age: "25",
+            address: "standard address",
+            message: "this is a message.",
         };
-        onCloseModal = jest.fn();
+        setIsSubmitted = jest.fn();
         render(
-            <SubmitIndicator formValues={data} setIsSubmitted={onCloseModal} />
+            <SubmitIndicator formValues={data} setIsSubmitted={setIsSubmitted} />
         );
     });
 
-    afterAll(() => {});
+    it("should show result table", () => {
+
+        expect(screen.getByText("氏名").nextElementSibling?.textContent).toBe("standard name");
+        expect(screen.getByText("性別").nextElementSibling?.textContent).toBe("男性");
+        expect(screen.getByText("年齢").nextElementSibling?.textContent).toBe("25 歳");
+        expect(screen.getByText("住所").nextElementSibling?.textContent).toBe("standard address");
+        expect(screen.getByText("ご意見内容").nextElementSibling?.textContent).toBe("this is a message.");
+
+    });
 
     it("should prepare anchor link when calling download", () => {
         // mock anchor element click
@@ -127,10 +135,4 @@ describe("SubmitIndicator", () => {
         (global.URL.revokeObjectURL as jest.Mock<any, any>).mockRestore();
     });
 
-    it("should call close-callback when closing", () => {
-        // close button click
-        fireEvent.click(screen.getByRole("button", { name: "閉じる" }));
-
-        expect(onCloseModal).toHaveBeenCalledTimes(1);
-    });
 });
