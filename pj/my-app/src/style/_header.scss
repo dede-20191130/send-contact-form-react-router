@@ -1,0 +1,26 @@
+.nav-header {
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    h1{
+        font-size: 24px;
+        margin-left: 20px;
+    }
+    ul {
+        display: flex;
+        list-style-type: none;
+        li{
+            display: inline-block;
+            margin-left: 15px;
+        }
+    }
+    a{
+        color: white;
+        transition: color 0.5s;
+        &:hover{
+            color: #61dafb;
+            
+        }
+    }
+}

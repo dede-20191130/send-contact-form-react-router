@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import moment from "moment";
 import "moment/locale/ja";
 
@@ -68,7 +68,7 @@ export function SubmitIndicator({
         return () => {
             setIsSubmitted(false);
         }
-    }, []);
+    }, [setIsSubmitted]);
     const onClickDownload = () => {
         const text = createTextForAccepttedContent(formValues, submiteedDate);
         const link = document.createElement("a");
@@ -82,9 +82,9 @@ export function SubmitIndicator({
 
     return (
         <>
-            <div id="modal-container">
-                <div id="modal-box">
-                    <h2 id="modal-message">ご意見を受け付けました。</h2>
+            <div id="result-container">
+                <div id="result-box">
+                    <h2 id="result-message">ご意見を受け付けました。</h2>
                     <table>
                         <tbody>
                             <tr>
@@ -109,9 +109,9 @@ export function SubmitIndicator({
                             </tr>
                         </tbody>
                     </table>
-                    <p>受理日時：{submiteedDate}</p>
+                    <p id="result-date">受理日時：{submiteedDate}</p>
                     <button
-                        id="modal-download"
+                        id="result-download"
                         onClick={onClickDownload}
                     >
                         送信内容のダウンロード

@@ -9,6 +9,7 @@ import {
     accepttedContentData,
 } from "./result-page/submit-indicator";
 import { NoMatch } from './error-pages/nomatch'
+import { DevResultDummyData } from './dev/debug-utils/result-page-dummydata';
 
 function App() {
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -34,30 +35,36 @@ function App() {
         <>
             <Header />
             <main>
-                <Switch>
-                    <Route exact path="/">
-                        <Home />
-                    </Route>
-                    <Route path="/opinion-form">
-                        <div className="normal-form-container">
-                            <OpinionForm onSubmit={handleSubmit}></OpinionForm>
-                        </div>
-                    </Route>
-                    <Route path="/result">
-                        {isSubmitted ? (
-                            <SubmitIndicator
-                                formValues={formValues}
-                                setIsSubmitted={setIsSubmitted}
-                            />
-                        ) : (
-                            <Redirect to="/" />
+                <div className="content">
+                    <Switch>
+                        <Route exact path="/">
+                            <Home />
+                        </Route>
+                        <Route path="/opinion-form">
+                            <div className="normal-form-container">
+                                <OpinionForm onSubmit={handleSubmit}></OpinionForm>
+                            </div>
+                        </Route>
+                        <Route path="/result">
+                            {isSubmitted ? (
+                                <SubmitIndicator
+                                    formValues={formValues}
+                                    setIsSubmitted={setIsSubmitted}
+                                />
+                            ) : (
+                                <Redirect to="/" />
+                            )}
+                        </Route>
+                        {/* for dev */}
+                        {process.env.NODE_ENV === "development" && (
+                            <DevResultDummyData />
                         )}
-                    </Route>
-                    {/* 404 error page */}
-                    <Route path="*">
-                        <NoMatch />
-                    </Route>
-                </Switch>
+                        {/* 404 error page */}
+                        <Route path="*">
+                            <NoMatch />
+                        </Route>
+                    </Switch>
+                </div>
             </main>
             <Footer />
         </>
